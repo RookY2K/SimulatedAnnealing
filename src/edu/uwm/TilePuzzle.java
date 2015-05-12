@@ -127,7 +127,7 @@ public class TilePuzzle {
         }
         arrangement = ret.toString();
 
-        System.out.println("Start configuration = " + arrangement);
+//        System.out.println("Start configuration = " + arrangement);
         return arrangement;
     }
 
@@ -200,7 +200,7 @@ public class TilePuzzle {
 
     private static void determineStart(int numTiles) {
         _n = numTiles;
-        System.out.print("\n");
+//        System.out.print("\n");
         initGoal();
         fillGoalQueues();
     }

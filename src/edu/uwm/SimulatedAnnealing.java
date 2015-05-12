@@ -36,7 +36,7 @@ public class SimulatedAnnealing {
                 results.numSuccesses++;
                 totalSuccessPathCount += currentPathCount;
 
-                if (currentPathCount < bestSuccessPathCount) {
+                if (currentPathCount < bestSuccessPathCount || numRepeats == 1) {
                     bestSuccessPathCount = currentPathCount;
                     results.bestPath = path;
                 }
@@ -44,7 +44,7 @@ public class SimulatedAnnealing {
                 results.numFailures++;
                 totalFailurePathCount += currentPathCount;
 
-                if (currentPathCount < bestFailurePathCount) {
+                if (currentPathCount < bestFailurePathCount || numRepeats == 1) {
                     bestFailurePathCount = currentPathCount;
                 }
             }
@@ -52,8 +52,8 @@ public class SimulatedAnnealing {
 
         results.bestSuccessPathCount = bestSuccessPathCount;
         results.bestFailurePathCount = bestFailurePathCount;
-        results.averageSuccessPathCount = (double)totalSuccessPathCount / results.numSuccesses;
-        results.averageFailurePathCount = (double)totalFailurePathCount / results.numFailures;
+        results.totalSuccessPathCount = totalSuccessPathCount;
+        results.totalFailurePathCount = totalFailurePathCount;
 
         return results;
     }
@@ -129,9 +129,11 @@ public class SimulatedAnnealing {
     }
 
     public static class SimulatedAnnealingResults {
-        int bestSuccessPathCount, bestFailurePathCount;
-        double averageSuccessPathCount, averageFailurePathCount;
+        int bestSuccessPathCount = Integer.MAX_VALUE;
+        int bestFailurePathCount = Integer.MAX_VALUE;
+        int totalSuccessPathCount, totalFailurePathCount;
         int numSuccesses, numFailures;
+        long totalCpuTime;
         Stack<String> bestPath;
     }
 }

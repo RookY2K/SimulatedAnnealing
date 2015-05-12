@@ -10,6 +10,7 @@ import java.util.Stack;
 public class HillClimbing {
     private static int LAST_HEURISTIC;
     private static int NEXT_HEURISTIC;
+    private static int MOST_SIDEWAYS_MOVES = 100;
 
     private static Stack<String> hillClimb(String start) {
         String current = start;
@@ -17,6 +18,8 @@ public class HillClimbing {
         Stack<String> path = new Stack<>();
         path.push(current);
         boolean stuck;
+        int lastDelta = -1;
+        int sidewaysMoves = 0;
 
         do {
             stuck = true;
@@ -27,7 +30,14 @@ public class HillClimbing {
 
             int delta = getDelta();
 
-            if (delta < 0) {
+            if (delta <= 0) {
+                if (delta == 0 && lastDelta == 0) {
+                    sidewaysMoves++;
+                } else {
+                    sidewaysMoves = 0;
+                }
+                lastDelta = delta;
+                if (sidewaysMoves >= MOST_SIDEWAYS_MOVES) break;
                 stuck = false;
                 current = neighbor;
                 LAST_HEURISTIC = NEXT_HEURISTIC;
@@ -93,16 +103,18 @@ public class HillClimbing {
 
         results.bestSuccessPathCount = bestSuccessPathCount;
         results.bestFailurePathCount = bestFailurePathCount;
-        results.averageSuccessPathCount = (double)totalSuccessPathCount / results.numSuccesses;
-        results.averageFailurePathCount = (double)totalFailurePathCount / results.numFailures;
+        results.totalSuccessPathCount = totalSuccessPathCount;
+        results.totalFailurePathCount = totalFailurePathCount;
 
         return results;
     }
 
     public static class HillClimbingResults {
-        int bestSuccessPathCount, bestFailurePathCount;
-        double averageSuccessPathCount, averageFailurePathCount;
+        int bestSuccessPathCount = Integer.MAX_VALUE,
+                bestFailurePathCount = Integer.MAX_VALUE;
+        int totalSuccessPathCount, totalFailurePathCount;
         int numSuccesses, numFailures;
+        long totalCpuTime;
         Stack<String> bestPath;
     }
 }
